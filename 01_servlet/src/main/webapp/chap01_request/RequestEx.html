@@ -49,16 +49,25 @@
   </form>
   
   <script>
-    
-    const form = document.getElementById('login');
-    form.addEventListener('submit', (e) => {
+    document.getElementById('join-form').addEventListener('submit', (e)=>{
+      //----- 이름 입력 여부 검사 (빈 문자열 검사)
       const name = document.getElementById('name');
-      if(name == null){
-        alert("이름을 입력해주세요.")
+      if(name.value === ''){
+        alert('이름은 필수입니다.');
+        name.focus();  //----------- 입력 상자에 자동으로 커서 두기
+        e.preventDefault();  //----- submit 방지 (요청 방지)
+        return;  //----------------- 이벤트 핸들러 종료 (아래 코드들이 실행되지 않도록 함수 종료)
       }
+      //----- 이메일 형식 검사 (정규식 검사)
+      const regEmail = /^[A-Za-z0-9-_]+@[A-Za-z0-9]+(\.[A-Za-z]{2,6}){1,2}$/;
       const email = document.getElementById('email');
+      if ( !regEmail.test(email.value) ){
+        alert('이메일의 형식을 확인하세요.');
+        email.focus();  //----------- 입력 상자에 자동으로 커서 두기
+        e.preventDefault();  //------ submit 방지 (요청 방지)
+        return;  //----------------- 이벤트 핸들러 종료 (아래에 더 이상 코드가 없으므로 생략 가능)
+      }
     })
-    
   </script>
   
 </body>
