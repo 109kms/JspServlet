@@ -19,6 +19,40 @@
   <br>
   <a href="/01_servlet/b.do">b.do 요청하기</a>
   <br>
+  
+  <!-- 4. 요청 메시지 분석-->
+  <a href="/01_servlet/a/b/c.do">요청 메시지 분석</a>
+  <br>
+  
+  <!-- 5. 요청 파라미터 -->
+  <a href="/01_servlet/a/b/c.do?p1=100&p2=abc&p3=가나다">요청 파라미터</a>
+  <br>
+  <form action="/01_servlet/a/b/c.do" method="get">
+    <input type="text" name="p1" placeholder="정수">
+    <br>    
+    <input type="text" name="p2" placeholder="문자열">
+    <br>    
+    <input type="text" name="p3" placeholder="문자열">
+    <br>    
+    <input type="text" name="p4" placeholder="문자열">
+    <br>    
+    <input type="submit" value="제출">
+    <button type="submit">제출</button>
+  </form>
+  <button id="btn-request" type="button" data-p1="100">요청</button>
+  <input type="hidden" id="p4" value="xyz">
+  <script>
+    
+    const btnRequest = document.getElementById("btn-request");
+    btnRequest.addEventListener("click", (e)=>{
+      const { btn }= e;  // 객체 구조분해할당
+      const 피포 = document.getElementById("p4");
+      location.href = `/01_servlet/a/b/c.do?p1=${btn.dataset.p1}&p2=${btn.textContent}&p3=${btn.id}&p4=${피포.getAttribute('value')}`;
+    })
+    
+  </script>
+  
+  
 
 </body>
 </html>

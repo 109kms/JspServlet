@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+  
+  <!-- RequestExServlet으로 요청합니다. 이름이 입력되지 않거나, 이메일이 잘못된 형식을 가지고 있으면 요청을 막습니다. -->
+  
+  <form id="login"
+        method="post"
+        action="/01_servlet/RequestExServlet">
+    <div class="inp-wrap">
+      <label for="name">이름</label>
+      <input type="text" name="name" id="name">
+    </div>
+    <div class="inp-wrap">
+      <label for="email">이메일</label>
+      <input type="text" name="email" id="email">
+    </div>
+    <div class="inp-wrap">
+      <input type="radio" name="gender" id="none" value="none" checked>
+      <label for="none">선택안함</label>
+      <input type="radio" name="gender" id="man" value="man">
+      <label for="man">남자</label>
+      <input type="radio" name="gender" id="woman" value="woman">
+      <label for="woman">여자</label>
+    </div>
+    <div class="inp-wrap">
+      <input type="checkbox" name="hobbies" id="game" value="game">
+      <label for="game">게임</label>
+      <input type="checkbox" name="hobbies" id="cook" value="cook">
+      <label for="cook">요리</label>
+      <input type="checkbox" name="hobbies" id="travel" value="travel">
+      <label for="travel">여행</label>
+    </div>
+    <div class="inp-wrap">
+      <select name="mobile">
+        <option value="1">SKT</option>
+        <option value="2">KT</option>
+        <option value="3">LGU+</option>
+      </select>
+      <input type="text" name="mobile">
+    </div>
+    <div class="btn-wrap">
+      <button type="submit">제출</button>
+    </div>
+  </form>
+  
+  <script>
+    
+    const form = document.getElementById('login');
+    form.addEventListener('submit', (e) => {
+      const name = document.getElementById('name');
+      if(name == null){
+        alert("이름을 입력해주세요.")
+      }
+      const email = document.getElementById('email');
+    })
+    
+  </script>
+  
+</body>
+</html>
