@@ -10,9 +10,26 @@
   onload = function(e){
     
     const btnJson = document.getElementById('btn-json');
+    btnJson.addEventListener("click", (e) => {
+      fetch("/01_servlet/JsonResponse", {method: "get",})
+        .then(response => response.json())
+        .then(json => {
+          // document.getElementById('div-json').textContent = JSON.stringify(json);
+          let ul = "<ul>";
+          ul += `<li>제목 ${json.title}</li>`;
+          ul += `<li>평점 ${json.stars}</li>`;
+          ul += `<li>감독 ${json.info.director}</li>`;
+          ul += `<li>장르 ${json.info.genre}</li>`;
+          ul += `<li>배우 ${json.actors.join(',')}</li>`;
+          document.getElementById('div-json').innerHTML = ul;
+        })
+    })
     
     
     const btnXml = document.getElementById('btn-xml');
+    btnXml.addEventListener("click", (e) => {
+      
+    })
     
   }
   
