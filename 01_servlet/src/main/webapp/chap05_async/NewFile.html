@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+  
+  //----- 본문을 다 읽은 뒤에 처리하는 이벤트 : load
+  
+  onload = function(e){
+    
+    const btnJson = document.getElementById('btn-json');
+    
+    
+    const btnXml = document.getElementById('btn-xml');
+    
+  }
+  
+</script>
+</head>
+<body>
+  
+  <button type="button" id="btn-json">비동기 요청(JSON)</button>
+  <div id="div-json">여기에 JSON 데이터가 나타납니다.</div>
+  <hr>
+  
+  <button type="button" id="btn-xml">비동기 요청(XML)</button>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>지역</th>
+        <th>온도</th>
+        <th>날씨</th>
+      </tr>
+    </thead>
+    <tbody id="weather"></tbody>
+  </table>
+
+</body>
+</html>
