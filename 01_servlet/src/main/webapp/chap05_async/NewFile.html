@@ -14,6 +14,7 @@
       fetch("/01_servlet/JsonResponse", {method: "get",})
         .then(response => response.json())
         .then(json => {
+          console.log(json);
           // document.getElementById('div-json').textContent = JSON.stringify(json);
           let ul = "<ul>";
           ul += `<li>제목 ${json.title}</li>`;
@@ -28,7 +29,25 @@
     
     const btnXml = document.getElementById('btn-xml');
     btnXml.addEventListener("click", (e) => {
-      
+      fetch('/01_servlet/XmlResponse')
+        .then(response => response.text())
+        .then(xml => {
+          // 문자열로 반환된 xml 데이터를 XML Document로 수정하기
+          const xmlDoc = new DOMParser().parseFromString(xml, "application/xml");
+          console.log(xmlDoc);
+          const weather = xmlDoc.getElementsByTagName("weather")[0];
+          let tbody = `<tr><td colspan="3">${weather.getAttribute('year')}${weather.getAttribute('month')}${weather.getAttribute('day')} ${weather.getAttribute('hour')}시</td>`;
+          const locals = xmlDoc.getElementsByTagName("local");
+          for (let i = 0; i < locals.length; i++){
+            tbody += "<tr>";
+            tbody += `<td>${locals[i].textContent}</td>`;
+            tbody += `<td>${locals[i].getAttribute('ta')}</td>`;
+            // tbody += `<td>${locals[i].getAttribute('desc')}</td>`;
+            tbody += `<td>맑음</td>`;
+            tbody += "</tr>";
+          }
+          document.getElementById('weather').innerHTML = tbody;
+        })
     })
     
   }
