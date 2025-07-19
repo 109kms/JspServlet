@@ -67,7 +67,14 @@ public class RequestServlet extends HttpServlet {
     System.out.println("ip: " + ip);
     
     //----- 요청 파라미터 (?p1=100&p2=abc&p3=가나다)
-    int p1 = Integer.parseInt(request.getParameter("p1"));
+    int p1 = 0;
+    try {
+        String p1Str = request.getParameter("p1");
+        p1 = (p1Str != null && !p1Str.isEmpty()) ? Integer.parseInt(p1Str) : 0;
+    } catch (NumberFormatException e) {
+        p1 = -1; // 예외 처리: 숫자 아닌 값이 들어온 경우
+    }
+
     String p2 = request.getParameter("p2");
     String p3 = request.getParameter("p3");
     Optional<String> opt = Optional.ofNullable(request.getParameter("p4"));  //----- 파라미터 p4를 Optional로 감쌉니다. 파라미터 p4는 null일수도 있습니다. (ofNullable)
