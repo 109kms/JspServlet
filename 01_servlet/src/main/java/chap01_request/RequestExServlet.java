@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class RequestExServlet
- */
 @WebServlet("/RequestExServlet")  //----- 서블릿 호출(요청)을 위한 주소
 public class RequestExServlet extends HttpServlet {
   
@@ -22,9 +19,6 @@ public class RequestExServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  request.setCharacterEncoding("UTF-8");
 	  
