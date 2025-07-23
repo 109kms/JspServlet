@@ -45,21 +45,29 @@ public class BoardDAO {
     List<BoardDTO> boards = new ArrayList<>();
     try {
       con = DBUtils.getConnection();
-      sql = "SELECT bid, uid, title, content, created_at, modified_at FROM tbl_board ORDER BY created_at DESC";
+      StringBuilder sb = new StringBuilder();
+      sb.append("SELECT b.bid, u.uid, u.nickname, title, content, created_at, modified_at");
+      sb.append("  FROM tbl_board b JOIN tbl_user u");
+      sb.append("    ON b.uid = u.uid");
+      sb.append(" ORDER BY bid DESC");
+      sb.append(" LIMIT 0, 10");
+      sql = sb.toString();
       ps = con.prepareStatement(sql);
       rs = ps.executeQuery();
       while(rs.next()) {
         int bid = rs.getInt(1);
         int uid = rs.getInt(2);
-        String title = rs.getString(3);
-        String content = rs.getString(4);
-        Timestamp createdAt = rs.getTimestamp(5);
-        Timestamp modifiedAt = rs.getTimestamp(6);
+        String nickname = rs.getString(3);
+        String title = rs.getString(4);
+        String content = rs.getString(5);
+        Timestamp createdAt = rs.getTimestamp(6);
+        Timestamp modifiedAt = rs.getTimestamp(7);
         //----- 결과 rs를 BoardDTO로 변환
         BoardDTO board = new BoardDTO();
         board.setBid(bid);
         UserDTO user = new UserDTO();
         user.setUid(uid);
+        user.setNickname(nickname);
         board.setUser(user);
         board.setTitle(title);
         board.setContent(content);
@@ -81,21 +89,27 @@ public class BoardDAO {
     BoardDTO board = null;
     try {
       con = DBUtils.getConnection();
-      sql = "SELECT bid, uid, title, content, created_at, modified_at FROM tbl_board WHERE bid = ?";
+      StringBuilder sb = new StringBuilder();
+      sb.append("SELECT b.bid, u.uid, u.nickname, title, content, created_at, modified_at");
+      sb.append("  FROM tbl_board b JOIN tbl_user u");
+      sb.append("    ON b.uid = u.uid");
+      sb.append(" WHERE bid = ?");
+      sql = sb.toString();
       ps = con.prepareStatement(sql);
       ps.setInt(1, bid);  // 쿼리문의 1번째 Placeholder(?)에 bid 전달
       rs = ps.executeQuery();
       if (rs.next()) {
         //----- DB에서 가져온 결과 ResultSet를 BoardDTO로 변환
         board = new BoardDTO();
-        board.setBid(rs.getInt(1));
+        board.setBid(rs.getInt("bid"));
         UserDTO user = new UserDTO();
-        user.setUid(rs.getInt(2));
+        user.setUid(rs.getInt("uid"));
         board.setUser(user);
-        board.setTitle(rs.getString(3));
-        board.setContent(rs.getString(4));
-        board.setCreatedAt(rs.getTimestamp(5));
-        board.setModifiedAt(rs.getTimestamp(6));
+        user.setNickname(rs.getString("nickname"));
+        board.setTitle(rs.getString("title"));
+        board.setContent(rs.getString("content"));
+        board.setCreatedAt(rs.getTimestamp("created_at"));
+        board.setModifiedAt(rs.getTimestamp("modified_at"));
       }
     } catch (Exception e) {
       e.printStackTrace();

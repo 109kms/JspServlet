@@ -33,10 +33,10 @@
   }
 %>
 
-<script>
-  alert("<%=msg%>");
-  location.href = "<%=url%>";
-</script>
+  <script>
+    alert("<%=msg%>");
+    location.href = "<%=url%>";
+  </script>
 
 
 
