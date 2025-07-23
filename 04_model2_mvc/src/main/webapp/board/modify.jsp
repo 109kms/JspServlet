@@ -11,7 +11,7 @@
 </head>
 <body>
 
-  <a href="${contextPath}/board/list.jsp">boards</a>
+  <h1>게시글 편집 화면</h1>
 
 </body>
 </html>
