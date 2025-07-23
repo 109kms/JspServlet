@@ -7,7 +7,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <%
-  //----- registForm.jsp에서 제출된 양식
+//----- registForm.jsp에서 제출된 양식
   request.setCharacterEncoding("UTF-8");
   String uid = request.getParameter("uid");
   String title = request.getParameter("title");
