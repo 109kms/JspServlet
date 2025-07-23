@@ -66,12 +66,25 @@
   
   <div class="flex-container">
     <c:forEach var="b" items="${boards}">
-      <div class="flex-item">
+      <div class="flex-item" onclick="detail(${b.bid})">
         <div><strong>${b.title}</strong></div>
         <div>${b.user.nickname}</div>      
       </div>
     </c:forEach>
   </div>
+  
+  <%--  
+    	 `` 내부에서 EL(${})과 템플릿 리터럴(${}) 구분하기
+    	 1. ${contextPath} : 자바 변수
+    	 2. \${bid} : 자바스크립트 변수
+  --%>
+  
+  <script type="text/javascript">
+    function detail(bid) {
+    	location.href = `${contextPath}/board/detail.do?bid=\${bid}&code=detail`;
+    }
+  </script>
 </div>
+
 </body>
 </html>
