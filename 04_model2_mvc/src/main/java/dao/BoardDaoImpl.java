@@ -190,7 +190,7 @@ public class BoardDaoImpl implements BoardDao {
     int count = 0;
     try {
       con = getConnection();
-      sql = "UPDATE tbl_board SET title = ?, content = ?, modified_at = CUTTRENT_TIMESTAMP WHERE bid = ?";
+      sql = "UPDATE tbl_board SET title = ?, content = ?, modified_at = CURRENT_TIMESTAMP WHERE bid = ?";
       ps = con.prepareStatement(sql);
       ps.setString(1, board.getTitle());
       ps.setString(2, board.getContent());

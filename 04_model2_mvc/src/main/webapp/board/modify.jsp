@@ -12,6 +12,33 @@
 <body>
 
   <h1>게시글 편집 화면</h1>
+  
+  <form action="${contextPath}/board/modify.do"
+        method="post">
+    
+    <input type="hidden" name="bid" value="${board.bid}">
+    
+    <label for="title">제목</label>
+    <input type="text" name="title" id="title" value="${board.title}">
+    
+    <br>
+    
+    <label for="content">내용</label>
+    <br>
+    <textarea name="content" id="content" rows="5" cols="30">${board.content}</textarea>
+    
+    <br>
+    
+    <button type="submit">수정하기</button>
+    <button type="button" onclick="list()">목록보기</button>
+    
+    <script type="text/javascript">
+      function list() {
+        location.href = "${contextPath}/board/list.do";
+      }
+    </script>
+    
+  </form>
 
 </body>
 </html>
