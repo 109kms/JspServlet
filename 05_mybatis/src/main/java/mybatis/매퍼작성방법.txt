@@ -1,0 +1,140 @@
+***** 매퍼 *****
+
+  1. SQL 구문을 작성하는 파일입니다.
+  
+  2. 쿼리문 실행을 위해서 다음 태그를 사용할 수 있습니다.
+    1) <select>
+    2) <insert>
+    3) <update>
+    4) <delete>
+    
+  3. 모든 태그는 id 속성을 가집니다.
+    1) 모든 태그들은 동일한 id 속성 값을 가질 수 없습니다.
+    2) SQL 구문과 매핑할 메소드의 이름을 id 속성 값으로 지정하는 것을 권장합니다.
+    
+  4. SQL 구문으로 전달되는 값이 있는 경우 parameterType 속성을 작성합니다. (생략 가능)
+    1) <select parameterType="int">
+    2) <insert parameterType="BoardDTO">
+    3) <update parameterType="BoardDTO">
+    4) <delete parameterType="int">
+    
+  5. SQL 구문의 결과 타입은 resultType 속성에 작성합니다. 
+     resultType 속성은 오직 <select> 태그만 작성합니다.
+     <insert>, <update>, <delete> 태그는 작성할 수 없습니다. (int 반환으로 고정되어 있기 때문)
+     
+    1) 리스트(List)를 반환하는 경우에는 List에 저장하는 요소의 타입을 작성합니다.
+    
+      List<BoardDTO> getBoards();
+      
+      <select id="getBoards" resultType="BoardDTO">
+        ...
+      </select>
+      
+    2) 함수 결과를 반환하는 경우 해당 결과 값의 타입을 작성합니다. 
+    
+      int getBoardCount();
+      
+      <select id="getBoardCount" resultType="int">
+        SELECT COUNT(*) FROM table;
+      </select>
+      
+    3) DTO를 반환하는 경우에는 DTO의 타입을 작성합니다.
+    
+      BoardDTO getBoardById(int bid);
+      
+      <select id="getBoardById" resultType="BoardDTO">
+        ...
+      </select>
+
+
+
+***** Parameter 처리 방식 *****
+
+  1. #{parameter}
+  
+    1) SQL 구문으로 전달된 파라미터를 PreparedStatement의 Place Holder(? 마크) 방식으로 처리합니다.
+    
+    2) 작성 방법
+      1) 파라미터가 여러 개인 경우 순서대로 param 뒤에 번호를 붙이는 방식을 사용
+        #{param1}, #{param2}, #{param3}, ...
+      2) 파라미터가 일반 변수인 경우 변수명을 사용
+        #{변수명}
+      3) 파라미터가 Map인 경우 Map의 키 이름을 사용
+        #{key}
+      4) 파라미터가 DTO인 경우 DTO의 필드 이름을 사용
+        #{field}
+        
+  2. ${parameter}
+  
+    1) 문자열 대체 방식입니다. (String Substitution)
+    2) 전달된 파라미터가 따옴표 또는 이스케이프 처리 없이 그대로 SQL 구문에 포함됩니다.
+    3) SQL 구문의 메타 데이터(테이블 이름, 칼럼 이름, 쿼리문 자체 키워드 등)를 처리할 때 사용합니다.
+
+
+
+***** CDATA *****
+
+  1. Character Data(문자 데이터)를 의미합니다.
+  2. 마크업 언어(xml)에서 마크업으로 해석하지 않고 문자를 그대로 포함하고자 할 때 CDATA를 사용합니다.
+  3. 주로 <, > 같은 기호를 처리할 때 사용합니다.
+  4. 형식
+    <![CDATA[ 문자데이터 ]]> 
+
+
+
+***** 동적 쿼리 *****
+
+  1. if
+    
+    1) 형식
+      <if test="파라미터조건식"></if>
+    
+    2) 예시
+      <if test="title != null"></if>
+      <if test="title != ''"></if>
+      <if test="userDTO.uid != 0"></if>
+
+  2. foreach
+    
+    1) 형식
+      <foreach collection="array|list|key|field" 
+               item="요소" 
+               open="시작구문" 
+               close="종료구문" 
+               separator="구분자" 
+               index="인덱스" 
+               nullable="true|false">
+        #{요소}
+      </foreach>
+      
+    2) 예시
+    
+      (1) 파라미터가 배열인 경우
+        
+        String[] flowers = {"모란", "백합", "국화"};
+        
+        <foreach collection="array" item="flower" open="NAME IN (" close=")" separator=",">
+          #{flower}
+        </foreach>
+        
+        실행되는 쿼리는 다음과 같습니다.  ->  NAME IN ('모란', '백합', '국화')
+      
+      (2) 파라미터가 List인 경우
+      
+        List<String> flowers = Arrays.asList("모란", "백합", "국화");
+        
+        <foreach collection="list" item="flower" open="(" close=")" separator=",">
+          #{flower}
+        </foreach>
+        
+        실행되는 쿼리는 다음과 같습니다.  ->  NAME IN ('모란', '백합', '국화')
+        
+      (3) 파라미터가 배열 또는 리스트를 가진 Map인 경우
+        
+        Map<String, Object> map = Map.of("flowers", Arrays.asList("모란", "백합", "국화"));
+        
+        <foreach collection="flowers" item="flower" separator=",">
+          #{flower}
+        </foreach>
+        
+        실행되는 쿼리는 다음과 같습니다.  ->  '모란', '백합', '국화'
