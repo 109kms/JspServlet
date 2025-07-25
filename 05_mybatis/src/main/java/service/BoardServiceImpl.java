@@ -205,13 +205,14 @@ public class BoardServiceImpl implements BoardService {
     
     //----- 수정
     int count = boardDao.updateBoard(board);
-    
+    System.out.println(count);
     //----- 성공/실패에 따른 msg, view
     String msg = "수정 성공";
-    String view = "/board/deatil?bid=" + bid + "&code=detail";
-    if (count == 0)
+    String view = "/board/detail?bid=" + bid + "&code=detail";
+    if (count == 0) {
       msg = "수정 실패";
       view = "/board/modifyForm?bid=" + bid + "&code=modify";
+    }
 
     // 응답
     PrintWriter out = response.getWriter();
