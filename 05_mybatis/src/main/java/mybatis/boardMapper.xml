@@ -4,4 +4,141 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="mybatis.boardMapper">
   
+  <!-- 중첩 객체 필드(UserDTO user) 매핑을 위한 resultMap 정의하기 -->
+  <resultMap type="BoardDTO" id="boardResultMap">
+    <!-- 단순 필드 -->
+    <id property="bid" column="bid"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="modifiedAt" column="modified_at"/>
+    
+    <!-- 중첩 객체 필드 (UserDTO user) -->
+    <association property="user" javaType="UserDTO">
+      <id property="uid" column="uid"/>
+      <result property="email" column="email"/>
+      <result property="nickname" column="nickname"/>
+    </association>
+    
+  </resultMap>
+  
+  <!-- 조회 (목록) -->  
+  <select id="getBoards" parameterType="String" resultMap="boardResultMap">
+    SELECT b.bid, u.uid, email, nickname, title, content, created_at, modified_at
+      FROM tbl_user u JOIN tbl_board b
+        ON u.uid = b.uid
+     ORDER BY bid ${sort}
+     LIMIT 0, 10
+  </select>
+  
+  <!-- 조회 (단일) -->
+  <select id="getBoardById" resultMap="boardResultMap">
+    SELECT b.bid, u.uid, email, nickname, title, content, created_at, modified_at
+      FROM tbl_user u JOIN tbl_board b
+        ON u.uid = b.uid
+     WHERE bid = #{bid}
+  </select>
+  
+  <!-- 조회 (함수 처리) -->
+  <select id="getBoardCount" resultType="int">
+    SELECT COUNT(*)
+      FROM tbl_board
+  </select>
+  
+  <!-- 조회 (제목과 내용 검색) -->
+  <select id="findBoardsUsingQuery" parameterType="Map" resultMap="boardResultMap">
+    SELECT b.bid, u.uid, email, nickname, title, content, created_at, modified_at
+      FROM tbl_user u JOIN tbl_board b
+        ON u.uid = b.uid
+     WHERE ${target} LIKE CONCAT('%', #{query}, '%') 
+     ORDER BY bid DESC
+  </select>
+  
+  <!-- 조회 (최초 작성일자 검색) -->
+  <select id="findBoardsUsingDate" parameterType="Map" resultMap="boardResultMap">
+    SELECT b.bid, u.uid, email, nickname, title, content, created_at, modified_at
+      FROM tbl_user u JOIN tbl_board b
+        ON u.uid = b.uid
+     WHERE <![CDATA[ DATE(created_at) >= #{beginDate} AND DATE(created_at) <= #{endDate}]]>
+     ORDER BY bid DESC
+  </select>
+  
+  <!-- 조회 (통합 검색) -->
+  <select id="findBoards" parameterType="Map" resultMap="boardResultMap">
+    SELECT b.bid, u.uid, email, nickname, title, content, created_at, modified_at
+      FROM tbl_user u JOIN tbl_board b
+        ON u.uid = b.uid
+     WHERE 
+      <if test="target == 'title' or target == 'content'">
+        ${target} LIKE CONCAT('%', #{query}, '%')
+      </if>
+      <if test="target == 'created_at'">
+        <![CDATA[ DATE(created_at) >= #{beginDate} AND DATE(created_at) <= #{endDate}]]>    
+      </if>
+     ORDER BY bid DESC
+  </select>
+  
+  <!-- 조회 (통합 검색2) -->
+  <select id="findBoards2" parameterType="Map" resultMap="boardResultMap">
+    SELECT b.bid, u.uid, email, nickname, title, content, created_at, modified_at
+      FROM tbl_user u JOIN tbl_board b
+        ON u.uid = b.uid
+   <!-- <where> 태그를 사용하면 WHERE 절이 AND 또는 OR로 시작하는 경우에 이를 지워줍니다. -->
+   <where> 
+      <if test="title != ''">
+        AND title LIKE CONCAT('%', #{title}, '%')
+      </if>
+      <if test="content != ''">
+        AND content LIKE CONCAT('%', #{content}, '%')    
+      </if>
+      <if test="beginDate != '' and endDate == ''">
+        <![CDATA[ AND DATE(created_at) >= #{beginDate} ]]>
+      </if>
+      <if test="beginDate == '' and endDate != ''">
+        <![CDATA[ AND DATE(created_at) >= #{endDate} ]]>
+      </if>
+      <if test="beginDate != '' and endDate != ''">
+        <![CDATA[ AND DATE(created_at) >= #{beginDate} AND DATE(created_at) <= #{endDate} ]]>
+      </if>
+    </where>
+     ORDER BY bid DESC
+  </select>
+  
+  <!-- 등록 -->
+  <insert id="insertBoard" parameterType="BoardDTO">
+    INSERT INTO tbl_board (
+        uid
+      , title
+      , content
+    ) VALUES (
+        #{user.uid}
+      , #{title}
+      , #{content}  
+    )
+  </insert>
+  
+  <!-- 수정 -->
+  <update id="updateBoard" parameterType="BoardDTO">
+    UPDATE tbl_board
+       SET title = #{title}
+         , content = #{content}
+     WHERE bid = #{bid}
+  </update>
+  
+  <!-- 삭제 (단일)-->
+  <delete id="deleteBoardById" parameterType="int">
+    DELETE
+      FROM tbl_board
+     WHERE bid = #{bid}
+  </delete>
+  
+  <!-- 삭제 (목록) -->
+  <delete id="deleteBoards" parameterType="String[]">
+    DELETE
+      FROM tbl_board
+     WHERE bid IN <foreach collection="array" item="bid" open="(" close=")" separator=",">#{bid}</foreach>
+  </delete>
+  
+  
+   
 </mapper>
