@@ -34,7 +34,7 @@
     
     <div>
       <div>통합 검색2</div>
-      <form action="${contextPath}/board/">
+      <form action="${contextPath}/board/find2">
         <input type="text" name="title" placeholder="제목 검색"><br>
         <input type="text" name="content" placeholder="내용 검색"><br>
         <input type="date" name="beginDate">-<input type="date" name="endDate"><br>
@@ -45,7 +45,7 @@
     <br>
     
     <div><a href="${contextPath}/board/list?sort=DESC">최신순</a> | <a href="${contextPath}/board/list?sort=ASC">과거순</a></div>
-    <form action="${contextPath}/board/" 
+    <form action="${contextPath}/board/removeBoards" 
           method="post">
       <div class="btn-wrap"><button type="submit">선택삭제</button></div>
       <table border="1">
@@ -61,7 +61,7 @@
           <c:forEach var="b" items="${boards}">
             <tr>
               <td><input type="checkbox" name="numbers" value="${b.bid}"></td>
-              <td><a href="${contextPath}/board/">${b.title}</a></td>
+              <td><a href="${contextPath}/board/detail?bid=${b.bid}&code=detail">${b.title}</a></td>
               <td>${b.user.nickname}</td>
               <td><fmt:formatDate value="${b.createdAt}" pattern="yyyy-MM-dd"/></td>
             </tr>
@@ -74,7 +74,9 @@
         </tfoot>
       </table>
       <br>
-      <div><a href="${contextPath}/board/">새 게시글 작성하기</a></div>
+      <c:if test="${not empty sessionScope.loginUser}">
+        <div><a href="${contextPath}/board/registForm">새 게시글 작성하기</a></div>
+      </c:if>
     </form>
   </div>
 

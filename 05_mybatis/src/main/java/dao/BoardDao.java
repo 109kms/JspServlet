@@ -90,7 +90,7 @@ public class BoardDao {
   //----- 등록
   public int insertBoard(BoardDTO board) {
     SqlSession ss = factory.openSession(false);  //----- 수동 커밋으로 설정
-    int count = ss.insert(namespace + "inserBoard", board);
+    int count = ss.insert(namespace + "insertBoard", board);
     if (count == 1) ss.commit(); //-- 성공 시 수동으로 커밋하기
     ss.close();
     return count;

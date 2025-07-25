@@ -34,6 +34,30 @@ public class BoardController extends HttpServlet {
     case "/board/find":
       af = boardService.findBoards(request);
       break;
+    case "/board/find2":
+      af = boardService.findBoards2(request);
+      break;
+    case "/board/removeBoards":
+      boardService.removeBoards(request, response);
+      break;
+    case "/board/registForm":
+      af = new ActionForward("/view/board/regist.jsp", false);
+      break;
+    case "/board/regist":
+      boardService.registBoard(request, response);
+      break;
+    case "/board/detail":
+      af = boardService.getBoardById(request);
+      break;
+    case "/board/remove":
+      boardService.removeBoard(request, response);
+      break;
+    case "/board/modifyForm":
+      af = boardService.getBoardById(request);
+      break;
+    case "/board/modify":
+      boardService.modifyBoard(request, response);
+      break;
     }
     
     if (af != null) {
