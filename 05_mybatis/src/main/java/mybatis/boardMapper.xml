@@ -133,7 +133,7 @@
   </delete>
   
   <!-- 삭제 (목록) -->
-  <delete id="deleteBoards" parameterType="String[]">
+  <delete id="deleteBoards" >
     DELETE
       FROM tbl_board
      WHERE bid IN <foreach collection="array" item="bid" open="(" close=")" separator=",">#{bid}</foreach>

@@ -96,6 +96,33 @@ public class BoardDao {
     return count;
   }
   
+  //----- 수정
+  public int updateBoard(BoardDTO board) {
+    SqlSession ss = factory.openSession();
+    int count = ss.update(namespace + "updateBoard", board);
+    if (count == 1) ss.commit();
+    ss.close();
+    return count;
+  }
+  
+  //----- 삭제 (단일)
+  public int deleteBoardById(int bid) {
+    SqlSession ss = factory.openSession();
+    int count = ss.delete(namespace + "deleteBoardById", bid);
+    if (count == 1) ss.commit();
+    ss.close();
+    return count;
+  }
+  
+  //----- 삭제 (목록)
+  public int deleteBoards(String[] numbers) {
+    SqlSession ss = factory.openSession();
+    int count = ss.delete(namespace + "deleteBoards", numbers);
+    if (count == numbers.length) ss.commit();
+    ss.close();
+    return count;
+  }
+  
   
 
 }

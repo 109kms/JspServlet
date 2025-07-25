@@ -17,7 +17,7 @@
     
     <div>
       <div>통합 검색1</div>
-      <form action="${contextPath}/board/">
+      <form action="${contextPath}/board/find">
         <select name="target">
           <option value="title">제목</option>
           <option value="content">내용</option>
@@ -44,7 +44,7 @@
     
     <br>
     
-    <div><a href="${contextPath}/board/">최신순</a> | <a href="${contextPath}/board/">과거순</a></div>
+    <div><a href="${contextPath}/board/list?sort=DESC">최신순</a> | <a href="${contextPath}/board/list?sort=ASC">과거순</a></div>
     <form action="${contextPath}/board/" 
           method="post">
       <div class="btn-wrap"><button type="submit">선택삭제</button></div>

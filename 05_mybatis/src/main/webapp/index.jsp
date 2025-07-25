@@ -24,7 +24,16 @@
   
   <hr>
   
+  <a href="${contextPath}/board/list">게시글</a>
   
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
 </body>
 </html>
